@@ -86,25 +86,40 @@ The front and back ends both needs a working configuration before running. They 
 
 ```sh
 
-# URLs to your Looker instance
-REACT_APP_LOOKER_HOST=yourinstance.looker.com
-REACT_APP_LOOKER_API_URL=https://yourinstance.looker.com
+# Looker host url without the https://
+REACT_APP_LOOKER_HOST=
 
-# Looker API Credentials
-REACT_APP_LOOKER_CLIENT_ID=YOUR_CLIENT_ID
-REACT_APP_LOOKER_CLIENT_SECRET=YOUR_CLIENT_SECRET
+# Looker API url retreived from Admin / API
+REACT_APP_LOOKER_API_URL=
 
-# (Optional) URL to your back-end (by default, the Node back-end running in the `server` folder)
-REACT_APP_LOOKER_PROXY_URL=http://localhost:8080/api
+# Looker API Credentials (use Admin User)
+REACT_APP_LOOKER_CLIENT_ID=
+REACT_APP_LOOKER_CLIENT_SECRET=
 
-# ID of the dashboard embedded on the dashboard page (make sure your embed user has access to it)
-REACT_APP_LOOKER_DASHBOARD=1234
+# URL to your front-end (by default, React app running at root)
+REACT_APP_LOOKER_FRONTEND_HOST=
 
-# ID of the Explore embedded on the Self Service page
-REACT_APP_LOOKER_EXPLORE=model::explore
+# URL to your back-end proxied through the frontend url above
+REACT_APP_LOOKER_PROXY_URL=
 
-# (Optional) Client ID used for Google sign-in
-REACT_APP_GSI_CLIENT_ID=myid.sapps.googleusercontent.com
+# ID of dashboard in tab 1 on the Embed Flavors Page
+REACT_APP_LOOKER_DASHBOARD_TAB_1=
+
+# ID of dashboard in tab 2 on the Embed Flavors Page
+REACT_APP_LOOKER_DASHBOARD_TAB_2=
+
+# IDs of two Looker Looks for the Embed Flavors Page
+REACT_APP_LOOKER_LOOKS_TAB_1=
+REACT_APP_LOOKER_LOOKS_TAB_2=
+
+# ID of Looker query for single cards (Requirements: 0 dimensions, 3 measures)
+REACT_APP_SINGLE_CARDS=
+
+# ID of Looker query for timeseries (Requirements: date dimension, 8 week filter, single measure)
+REACT_APP_TIMESERIES=
+
+# ID of the Explore embedded on the Self Service page (format: model:explore)
+REACT_APP_LOOKER_EXPLORE=
 ```
 
 This can also be achieved by filling the `sample-env.env` provided, and renaming it to `.env`.
@@ -147,4 +162,4 @@ cd server
 npm start
 ```
 
-This will have the front-end running on `localhost:3000`.
+This will have the front-end running on `localhost:5000`.

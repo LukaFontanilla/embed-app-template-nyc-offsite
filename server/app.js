@@ -23,7 +23,7 @@ app.use(
 app.use(bodyParser.json())
 
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? config.frontend_host : 'http://localhost:3000',
+  origin: config.frontend_host,
   credentials: true
 }))
 
