@@ -3,24 +3,30 @@ import { useNavigate } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
 import React from 'react'
 
+/**
+ * Day 1 Challenge 3: Embed SDK Methods
+ * 
+ * Task steps:
+ * - Navigate to Step 1
+ * - Uncomment filterName and initialFilter variables
+ * - Fill in with values for your environment
+ * - Navigate to Step 2
+ * - Add SDK Method to apply theme
+ * - Add SDK Method to apply default filters
+ */
+
 const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
   const navigate = useNavigate()
-  const filterName = 'Traffic Source'
-  const filterOptions = ['Display','Email','Organic','Search']
-  const initialFilter = filterOptions[0]
+
+  // STEP 1
+  // const filterName = 
+  // const initialFilter = 
+
   const [dashboardStatus, setDashboardStatus] = useState('Loading...')
-  const [selectedFilter, setSelectedFilter] = useState(initialFilter)
 
   const onDashboardSetup = (d) => {
     setDashboard(d)
   }
-
-  useEffect(() => {
-    if (dashboard) {
-      dashboard.updateFilters({ [filterName]: selectedFilter })
-      dashboard.run()
-    }
-  }, [dashboard, selectedFilter])
 
   const setupDashboard = useCallback(
     (div) => {
@@ -31,7 +37,14 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
       LookerEmbedSDK.createDashboardWithId(id)
         .withAllowAttr('fullscreen')
         .appendTo(div)
-        .withTheme("EmbedAppTemplate")
+
+        // STEP 2
+        // START
+        // Apply Theme here
+        // Apply Default Filter here
+        // END
+
+
         // Listen to messages to display progress
         .on('dashboard:loaded', () => setDashboardStatus('Loaded'))
         .on('dashboard:run:start', (e) => {
@@ -42,7 +55,6 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
         .on('dashboard:edit:start', () => setDashboardStatus('Editing'))
         .on('dashboard:filters:changed', (e) => {
           // console.log("Filters Changed: ", e)
-          setSelectedFilter(e.dashboard.dashboard_filters[filterName])
         })
         .on('dashboard:edit:cancel', () =>
           setDashboardStatus('Editing cancelled')
@@ -60,7 +72,6 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
         })
         // Give the embedded content a class for styling purposes
         .withClassName('looker-embed')
-        .withFilters({ [filterName]: initialFilter })
         .build()
         .connect()
         .then(onDashboardSetup)
@@ -75,18 +86,6 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
 
   return (
     <div className={(tab === 3 ? 'hide' : 'show')} id="dashboard-container">
-      {tab === 2 && (<label>
-        Dashboard filter: {selectedFilter}
-        <select
-          value={selectedFilter}
-          onChange={(e) => setSelectedFilter(e.target.value)}
-        >
-          {filterOptions.map((o) => (
-            <option value={o}>{o}</option>
-          ))}
-        </select>
-      </label>) 
-      }
       <div id="dashboard-state" className="loading-message">
         {dashboardStatus}
       </div>

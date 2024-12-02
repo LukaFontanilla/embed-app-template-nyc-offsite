@@ -19,8 +19,8 @@ root.render(
           <Route path="/" element={<Root />}>
             <Route path="" name="Overview" element={<Home />} />
             <Route path="reports" element={<TabbedEmbed />} />
-            <Route path="custom" element={<ApiPage />} />
-            <Route path="explore" element={<SelfService />} />
+            {/* <Route path="custom" element={<ApiPage />} />
+            <Route path="explore" element={<SelfService />} /> */}
           </Route>
         </Routes>
     </BrowserRouter>
