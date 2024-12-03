@@ -32,6 +32,14 @@ ChartJS.register(
   Filler
 )
 
+/**
+ * Day 1 Challenge 7: Looker API Query Call
+ * Task steps:
+ * - Navigate to Step 1
+ * - Convert the run_query call, to a query call that can be composed on the fly (ie. fields dynamically swapped in or out, filters conditionally applied, etc.)
+ * - Extra Credit: create UI to allow for a dynamic measure (for example: switching between total sales and average sales price)
+ */
+
 
 function SdkCustomView({sdk}) {
   const [events, setEvents] = useState([])
@@ -97,11 +105,18 @@ function SdkCustomView({sdk}) {
   }
 
   const getEvents = useCallback(() => {
+
+    // STEP 1
+
+    // START
     sdk
       .run_query({
         query_id: lookerConfig.timeSeries,
         result_format: "json",
       })
+    
+    // END
+
       .then((resp) => {
         console.log(resp.value)
         setEvents(resp.value)
