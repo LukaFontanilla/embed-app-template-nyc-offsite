@@ -72,7 +72,7 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
           navigate("/")
         })
     },
-    [setDashboardStatus, initialFilter, navigate, id]
+    [setDashboardStatus, navigate, id]
   )
 
   return (
