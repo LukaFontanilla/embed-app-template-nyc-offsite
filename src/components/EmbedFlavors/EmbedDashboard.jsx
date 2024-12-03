@@ -4,16 +4,38 @@ import { useCallback, useEffect, useState } from 'react'
 import React from 'react'
 
 /**
- * Day 1 Challenge 4: Targeting Specific Theme Attributes
+ * Day 1 Challenge 5: JS Events - Filters
  * 
  * Task steps:
  * - Navigate to Step 1
- * - Add the SDK method that allows targeting specific theme attributes
+ * - uncomment filterName, filterOptions, initialFilter, filter / setFilter, and useEffect
+ * - fill in values for filterName, filterOptions, intialFilter
+ * - complete the useEffect by adding the correct functions to each "dashboard" line. 
+ *    Hint, there are two steps for syncing filters from outside iframe with the dashboard and running the dashboard
+ * - Navigate to Step 2
+ * - Make sure if the filters in the Looker UI change the external filters update
  */
 
 const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
   const navigate = useNavigate()
   const [dashboardStatus, setDashboardStatus] = useState('Loading...')
+  
+  // STEP 1
+
+  // START
+  // const filterName = 
+  // const filterOptions = []
+  // const initialFilter = 
+  // const [filter, setFilter] = useState(initialFilter)
+
+  // useEffect(() => {
+  //   if(dashboard) {
+  //     dashboard.
+  //     dashboard.
+  //   }
+  // },[dashboard])
+
+  // END
 
   const onDashboardSetup = (d) => {
     setDashboard(d)
@@ -29,24 +51,20 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
         .withAllowAttr('fullscreen')
         .appendTo(div)
 
-        // STEP 1
-
-        // START
-        // Add sdk method for targeting background color of iframe here
-        // END
-
-
         // Listen to messages to display progress
         .on('dashboard:loaded', () => setDashboardStatus('Loaded'))
         .on('dashboard:run:start', (e) => {
-          // console.log("Dashboard Run: ", e)
           setDashboardStatus('Running')
         })
         .on('dashboard:run:complete', () => setDashboardStatus('Done'))
         .on('dashboard:edit:start', () => setDashboardStatus('Editing'))
-        .on('dashboard:filters:changed', (e) => {
-          // console.log("Filters Changed: ", e)
-        })
+        
+        // STEP 2
+
+        // START
+        // Make sure if the filters in the Looker UI change the external filters update
+        // END
+
         .on('dashboard:edit:cancel', () =>
           setDashboardStatus('Editing cancelled')
         )
