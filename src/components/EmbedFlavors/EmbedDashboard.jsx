@@ -4,24 +4,15 @@ import { useCallback, useEffect, useState } from 'react'
 import React from 'react'
 
 /**
- * Day 1 Challenge 3: Embed SDK Methods
+ * Day 1 Challenge 4: Targeting Specific Theme Attributes
  * 
  * Task steps:
  * - Navigate to Step 1
- * - Uncomment filterName and initialFilter variables
- * - Fill in with values for your environment
- * - Navigate to Step 2
- * - Add SDK Method to apply theme
- * - Add SDK Method to apply default filters
+ * - Add the SDK method that allows targeting specific theme attributes
  */
 
 const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
   const navigate = useNavigate()
-
-  // STEP 1
-  // const filterName = 
-  // const initialFilter = 
-
   const [dashboardStatus, setDashboardStatus] = useState('Loading...')
 
   const onDashboardSetup = (d) => {
@@ -38,10 +29,10 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
         .withAllowAttr('fullscreen')
         .appendTo(div)
 
-        // STEP 2
+        // STEP 1
+
         // START
-        // Apply Theme here
-        // Apply Default Filter here
+        // Add sdk method for targeting background color of iframe here
         // END
 
 
