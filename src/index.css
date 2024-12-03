@@ -18,6 +18,17 @@
   height:90%;
 }
 
+::backdrop {
+  background: radial-gradient(
+    circle at -50% -160%,
+    rgb(139 108 67 / 100%) 0%,
+    rgb(139 108 67 / 0%) 72%
+  ),
+  #242425bb;
+  opacity: 0.75;
+}
+
+
 #dashboard-container {
   height: 100%;
   width: 100%;

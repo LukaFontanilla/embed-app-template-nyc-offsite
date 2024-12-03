@@ -4,38 +4,19 @@ import { useCallback, useEffect, useState } from 'react'
 import React from 'react'
 
 /**
- * Day 1 Challenge 5: JS Events - Filters
+ * Day 1 Challenge 6: JS Events - Cancelling Events
  * 
  * Task steps:
  * - Navigate to Step 1
- * - uncomment filterName, filterOptions, initialFilter, filter / setFilter, and useEffect
- * - fill in values for filterName, filterOptions, intialFilter
- * - complete the useEffect by adding the correct functions to each "dashboard" line. 
- *    Hint, there are two steps for syncing filters from outside iframe with the dashboard and running the dashboard
- * - Navigate to Step 2
- * - Make sure if the filters in the Looker UI change the external filters update
+ * - identify the two events that track drilling and exploring from here on a tile
+ * - implement logic with the Embed SDK to cancel those events, without having to remove the user permissions
+ * - Extra Credit: see the dialog modal with id "monetization" in the render function at the bottom, 
+ *    pop that up when a user tries to drill or explore from here
  */
 
 const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
   const navigate = useNavigate()
   const [dashboardStatus, setDashboardStatus] = useState('Loading...')
-  
-  // STEP 1
-
-  // START
-  // const filterName = 
-  // const filterOptions = []
-  // const initialFilter = 
-  // const [filter, setFilter] = useState(initialFilter)
-
-  // useEffect(() => {
-  //   if(dashboard) {
-  //     dashboard.
-  //     dashboard.
-  //   }
-  // },[dashboard])
-
-  // END
 
   const onDashboardSetup = (d) => {
     setDashboard(d)
@@ -58,18 +39,21 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
         })
         .on('dashboard:run:complete', () => setDashboardStatus('Done'))
         .on('dashboard:edit:start', () => setDashboardStatus('Editing'))
-        
-        // STEP 2
-
-        // START
-        // Make sure if the filters in the Looker UI change the external filters update
-        // END
 
         .on('dashboard:edit:cancel', () =>
           setDashboardStatus('Editing cancelled')
         )
         .on('dashboard:save:complete', () => setDashboardStatus('Saved'))
         .on('dashboard:delete:complete', () => setDashboardStatus('Deleted'))
+
+        // STEP 1
+
+        // START
+
+        // .on('',(e) => {})
+        // .on('',(e) => {})
+
+        // END
 
         // Listen to session status
         .on('session:status', (event) => {
@@ -90,7 +74,7 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
           navigate("/")
         })
     },
-    [setDashboardStatus, initialFilter, navigate, id]
+    [setDashboardStatus, navigate, id]
   )
 
   return (
@@ -98,6 +82,12 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
       <div id="dashboard-state" className="loading-message">
         {dashboardStatus}
       </div>
+      <dialog id="monetization" className="rounded-lg p-2 shadow-md hover:shadow-2xl">
+        <button autofocus onClick={(e) => document.getElementById("monetization").close()}>Close</button>
+        <div className='h-[20vh] w-[15vw] pt-4'>
+          <h1 className="text-lg">Not allowed. Upgrade user tier to Premium to unlock drilling</h1>
+        </div>
+      </dialog>
       <div id="dashboard" ref={setupDashboard}></div>
     </div>
   )
