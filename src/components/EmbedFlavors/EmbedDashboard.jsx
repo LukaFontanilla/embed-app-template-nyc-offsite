@@ -33,7 +33,7 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
   //     dashboard.
   //     dashboard.
   //   }
-  // },[dashboard])
+  // },[dashboard,filter])
 
   // END
 
