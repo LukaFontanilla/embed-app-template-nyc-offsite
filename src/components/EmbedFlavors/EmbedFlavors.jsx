@@ -4,23 +4,20 @@ import EmbedDashboard from 'components/EmbedFlavors/EmbedDashboard'
 import EmbedLook from './EmbedLook'
 import { lookerConfig } from 'lookerConfig'
 
+/**
+ * Day 2 Challenge 1: Multi-tabbed Dashboard
+ * 
+ * Task steps:
+ * - Modify this file to load a dashboard (lookerConfig.tab1DashboardId) when tab = 1 and a different dashboard (lookerConfig.tab2DashboardId) when tab = 2
+ * - Extra Credit: Modify your code to do so without unloading the iFrame from the DOM
+ */
+
 function TabbedEmbed() {
   const [tab, setTab] = useState(1)
   const [dashboard, setDashboard] = useState(undefined)
   const [selectedLook, setSelectedLook] = useState(209)
   const defaultDashboard = lookerConfig.tab1DashboardId
-
-
-  useEffect(() => {
-    if (dashboard) {
-      if(tab === 1) {
-        dashboard.loadDashboard(lookerConfig.tab1DashboardId,true)
-        return
-      }
-      dashboard.loadDashboard(lookerConfig.tab2DashboardId,true)
-      return
-    }
-  },[dashboard, tab])
+  const [dashboardStatus, setDashboardStatus] = useState("Loading...")
 
   const looks = [
     { id: lookerConfig.tab1LookId, question: "Business Question 1" },
@@ -98,7 +95,14 @@ function TabbedEmbed() {
             </div>
           </div>
           <div class="w-full pl-4 pr-4 h-[92%]">
-            <EmbedDashboard id={defaultDashboard} dashboard={dashboard} setDashboard={setDashboard} tab={tab}/>
+            <EmbedDashboard 
+              id={defaultDashboard} 
+              dashboard={dashboard} 
+              setDashboard={setDashboard} 
+              tab={tab} 
+              dashboardStatus={dashboardStatus} 
+              setDashboardStatus={setDashboardStatus}
+            />
             {tab === 3 && loadLooks()}
           </div>
         </Tile>
