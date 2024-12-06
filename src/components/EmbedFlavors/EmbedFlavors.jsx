@@ -5,11 +5,14 @@ import EmbedLook from './EmbedLook'
 import { lookerConfig } from 'lookerConfig'
 
 /**
- * Day 2 Challenge 1: Multi-tabbed Dashboard
+ * Day 2 Challenge 2: Managing Filters Across Tabs
  * 
  * Task steps:
- * - Modify this file to load a dashboard (lookerConfig.tab1DashboardId) when tab = 1 and a different dashboard (lookerConfig.tab2DashboardId) when tab = 2
- * - Extra Credit: Modify your code to do so without unloading the iFrame from the DOM
+ * - Navigate to STEP 1 in this file
+ * - Fill in the relevant filter options for your reports
+ * - Navigate to STEP 2 in the EmbedFlavors/EmbedDashboard.jsx file
+ * - Make sure that if a dashboard filter value in Looker is updated, the parent filter is also updated
+ * - Extra Credit: Modify your code to ensure that the filter value selected is applied across tabs
  */
 
 function TabbedEmbed() {
@@ -18,11 +21,55 @@ function TabbedEmbed() {
   const [selectedLook, setSelectedLook] = useState(209)
   const defaultDashboard = lookerConfig.tab1DashboardId
   const [dashboardStatus, setDashboardStatus] = useState("Loading...")
+  
+  // STEP 1
+  // START
+
+  // const filterName = ''
+  // const filterOptions = []
+  // const initialFilter = undefined
+  // const [selectedFilter, setSelectedFilter] = useState()
+
+  // useEffect(() => {
+  //   if(dashboard) {
+  //     dashboard.
+  //     dashboard.
+  //   }
+  // },[dashboard,selectedFilter])
+
+  // END
+
+
 
   const looks = [
     { id: lookerConfig.tab1LookId, question: "Business Question 1" },
     { id: lookerConfig.tab2LookId, question: "Business Question 2" }
   ];
+
+  useEffect(() => {
+    const loadDashboardWithFilters = async () => {
+      if (!dashboard) return;
+
+      try {
+        // Determine which dashboard to load based on tab
+        const dashboardId = tab === 1 
+          ? lookerConfig.tab1DashboardId 
+          : lookerConfig.tab2DashboardId;
+
+        await dashboard.loadDashboard(dashboardId, true);
+      } catch (error) {
+        console.error('Error loading dashboard:', error);
+      } 
+    };
+
+    loadDashboardWithFilters();
+
+    // Cleanup function to handle unmounting
+    return () => {
+      // Add any necessary cleanup here
+    };
+  }, [dashboard, tab]);
+
 
   const loadLooks = () => {
     return (
@@ -95,13 +142,26 @@ function TabbedEmbed() {
             </div>
           </div>
           <div class="w-full pl-4 pr-4 h-[92%]">
-            <EmbedDashboard 
-              id={defaultDashboard} 
-              dashboard={dashboard} 
-              setDashboard={setDashboard} 
-              tab={tab} 
-              dashboardStatus={dashboardStatus} 
-              setDashboardStatus={setDashboardStatus}
+          {tab !== 3 && (<label>
+              Dashboard filter: {selectedFilter}
+              <select
+                value={selectedFilter}
+                onChange={(e) => setSelectedFilter(e.target.value)}
+              >
+                {filterOptions.map((o) => (
+                  <option value={o}>{o}</option>
+                ))}
+              </select>
+            </label>) 
+            }
+          <EmbedDashboard 
+            id={defaultDashboard} 
+            dashboard={dashboard} 
+            setDashboard={setDashboard} 
+            tab={tab} 
+            setDashboardStatus={setDashboardStatus}
+            filterName={filterName}
+            setSelectedFilter={setSelectedFilter}
             />
             {tab === 3 && loadLooks()}
           </div>
