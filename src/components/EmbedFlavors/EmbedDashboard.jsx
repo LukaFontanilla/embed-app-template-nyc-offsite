@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCallback } from 'react'
 import React from 'react'
 
-const EmbedDashboard = ({id, setDashboard, tab, setDashboardStatus, filterName, setSelectedFilter}) => {
+const EmbedDashboard = ({id, setDashboard, tab, setDashboardStatus, filterName, setSelectedFilter, setDashboardOptions}) => {
   const navigate = useNavigate()
 
   const onDashboardSetup = (d) => {
@@ -21,12 +21,26 @@ const EmbedDashboard = ({id, setDashboard, tab, setDashboardStatus, filterName, 
         .appendTo(div)
 
         // Listen to messages to display progress
-        .on('dashboard:loaded', () => setDashboardStatus('Loaded'))
+        .on('dashboard:loaded', () => {
+          setDashboardStatus('Loaded')
+          // STEP 2
+          // START
+
+
+          // END
+        })
         .on('dashboard:run:start', (e) => {
           console.log("Dashboard: ", e)
           setDashboardStatus('Running')
         })
-        .on('dashboard:run:complete', () => setDashboardStatus('Done'))
+        .on('dashboard:run:complete', () => {
+          setDashboardStatus('Done')
+          // STEP 2
+          // START
+
+
+          // END
+        })
         .on('dashboard:edit:start', () => setDashboardStatus('Editing'))
 
         .on('dashboard:edit:cancel', () =>
@@ -35,12 +49,9 @@ const EmbedDashboard = ({id, setDashboard, tab, setDashboardStatus, filterName, 
         .on('dashboard:save:complete', () => setDashboardStatus('Saved'))
         .on('dashboard:delete:complete', () => setDashboardStatus('Deleted'))
 
-        // STEP 2
-        // START
-
-        // .on('', (e) => {})
-
-        // END
+        .on('dashboard:filters:changed', (e) => {
+          setSelectedFilter(e.dashboard.dashboard_filters[filterName])
+        })
 
         // Listen to session status
         .on('session:status', (event) => {

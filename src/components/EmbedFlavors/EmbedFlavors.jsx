@@ -5,14 +5,16 @@ import EmbedLook from './EmbedLook'
 import { lookerConfig } from 'lookerConfig'
 
 /**
- * Day 2 Challenge 2: Managing Filters Across Tabs
+ * Day 2 Challenge 3: Changing Dashboard Layout Properties
  * 
  * Task steps:
  * - Navigate to STEP 1 in this file
- * - Fill in the relevant filter options for your reports
+ * - Uncomment the commented out code and Fill in the built in cartesian series options for Looker
  * - Navigate to STEP 2 in the EmbedFlavors/EmbedDashboard.jsx file
- * - Make sure that if a dashboard filter value in Looker is updated, the parent filter is also updated
- * - Extra Credit: Modify your code to ensure that the filter value selected is applied across tabs
+ * - For both, find the given report's options value and pass it to the setDashboardOptions() function
+ * - Navigate to STEP 3 in the EmbedFlavors.jsx file
+ * - Uncomment the useEffect and the function below it
+ * - Complete the code within the if(updatedOptions) {} to update the dashboard Options with the Embed SDK
  */
 
 function TabbedEmbed() {
@@ -20,26 +22,92 @@ function TabbedEmbed() {
   const [dashboard, setDashboard] = useState(undefined)
   const [selectedLook, setSelectedLook] = useState(209)
   const defaultDashboard = lookerConfig.tab1DashboardId
-  const [dashboardStatus, setDashboardStatus] = useState("Loading...")
-  
+  const filterName = 'Traffic Source'
+  const filterOptions = ['Display','Email','Organic','Search']
+  const initialFilter = filterOptions[0]
+  const [dashboardStatus, setDashboardStatus] = useState('Loading...')
+  const [selectedFilter, setSelectedFilter] = useState(initialFilter)
+
   // STEP 1
   // START
 
-  // const filterName = ''
-  // const filterOptions = []
-  // const initialFilter = undefined
-  // const [selectedFilter, setSelectedFilter] = useState()
-
-  // useEffect(() => {
-  //   if(dashboard) {
-  //     dashboard.
-  //     dashboard.
-  //   }
-  // },[dashboard,selectedFilter])
+  // const [seriesType, setSeriesType] = useState(null)
+  // const [dashboardOptions, setDashboardOptions] = useState(null)
+  // const seriesOptions = []
 
   // END
 
+  // STEP 3
+  // START
 
+  // useEffect(() => {
+  //   // First check if all required values exist
+  //   if (!dashboard || !dashboardOptions || !seriesType) {
+  //     return;
+  //   }
+
+  //   // Safely access and transform dashboard options
+  //   try {
+  //     const updatedOptions = changeVisualizationType(dashboardOptions, seriesType);
+  //     if (updatedOptions) {
+        
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating dashboard visualization:', error);
+  //   }
+  // }, [dashboard, seriesType, dashboardOptions]);
+
+  /**
+ * Changes the visualization type for all column, area, and line charts in a dashboard configuration
+ * @param {Object} dashboardConfig - The dashboard configuration object
+ * @param {string} newType - The new visualization type 
+ * @returns {Object} Updated dashboard configuration
+ */
+  // function changeVisualizationType(dashboardConfig, newType) {
+    
+  //   // Create a deep copy of the dashboard config to avoid modifying the original
+  //   const updatedConfig = JSON.parse(JSON.stringify(dashboardConfig));
+    
+  //   // Get all elements from the dashboard
+  //   const elements = updatedConfig.elements;
+    
+  //   // Iterate through each element
+  //   Object.keys(elements).forEach(elementId => {
+  //     const element = elements[elementId];
+      
+  //     // Check if the element has vis_config
+  //     if (element.vis_config && element.vis_config.type) {
+  //       const currentType = element.vis_config.type;
+        
+  //       // Check if current visualization type is one we can change
+  //       if (seriesOptions.includes(currentType)) {
+  //         // Store original type for reference
+  //         // element.vis_config.original_type = currentType;
+          
+  //         // Update to new visualization type
+  //         element.vis_config.type = newType;
+          
+  //         // Handle specific configuration adjustments based on new type
+  //         if (newType === 'looker_area') {
+  //           // Add area chart specific configurations
+  //           element.vis_config.stacking = element.vis_config.stacking || 'normal';
+  //           element.vis_config.interpolation = element.vis_config.interpolation || 'monotone';
+  //         } else if (newType === 'looker_column') {
+  //           // Add column chart specific configurations
+  //           element.vis_config.stacking = element.vis_config.stacking || '';
+  //           delete element.vis_config.interpolation;
+  //         } else if (newType === 'looker_line') {
+  //           // Add line chart specific configurations
+  //           element.vis_config.interpolation = element.vis_config.interpolation || 'linear';
+  //           delete element.vis_config.stacking;
+  //         }
+  //       }
+  //     }
+  //   });
+    
+  //   return updatedConfig;
+  // }
+  // END
 
   const looks = [
     { id: lookerConfig.tab1LookId, question: "Business Question 1" },
@@ -56,7 +124,7 @@ function TabbedEmbed() {
           ? lookerConfig.tab1DashboardId 
           : lookerConfig.tab2DashboardId;
 
-        await dashboard.loadDashboard(dashboardId, true);
+        await dashboard.loadDashboard(`${dashboardId}?${filterName}=${selectedFilter}`, true);
       } catch (error) {
         console.error('Error loading dashboard:', error);
       } 
@@ -68,7 +136,7 @@ function TabbedEmbed() {
     return () => {
       // Add any necessary cleanup here
     };
-  }, [dashboard, tab]);
+  }, [dashboard, tab, selectedFilter]);
 
 
   const loadLooks = () => {
@@ -142,18 +210,32 @@ function TabbedEmbed() {
             </div>
           </div>
           <div class="w-full pl-4 pr-4 h-[92%]">
-          {tab !== 3 && (<label>
-              Dashboard filter: {selectedFilter}
+          {tab !== 3 && (
+            <>
+            <label>
+                Dashboard filter: {selectedFilter}
+                <select
+                  value={selectedFilter}
+                  onChange={(e) => setSelectedFilter(e.target.value)}
+                  >
+                  {filterOptions.map((o) => (
+                    <option value={o}>{o}</option>
+                    ))}
+                </select>
+            </label>
+            <label>
+              Looker Series Type: {seriesType}
               <select
-                value={selectedFilter}
-                onChange={(e) => setSelectedFilter(e.target.value)}
-              >
-                {filterOptions.map((o) => (
+                value={seriesType}
+                onChange={(e) => setSeriesType(e.target.value)}
+                >
+                {seriesOptions.map((o) => (
                   <option value={o}>{o}</option>
-                ))}
+                  ))}
               </select>
-            </label>) 
-            }
+            </label>
+            </>
+            )}
           <EmbedDashboard 
             id={defaultDashboard} 
             dashboard={dashboard} 
@@ -162,6 +244,7 @@ function TabbedEmbed() {
             setDashboardStatus={setDashboardStatus}
             filterName={filterName}
             setSelectedFilter={setSelectedFilter}
+            setDashboardOptions={setDashboardOptions}
             />
             {tab === 3 && loadLooks()}
           </div>
