@@ -14,6 +14,26 @@ import React from 'react'
  *    pop that up when a user tries to drill or explore from here
  */
 
+const tiers = [
+  {
+    name: 'Basic',
+    price: '$0',
+    current: true,
+    features: ['Basic Analytics', 'Standard Reports', 'Email Support']
+  },
+  {
+    name: 'Advanced',
+    price: '$29',
+    recommended: true,
+    features: ['Data Drilling', 'Advanced Analytics', 'Priority Support', 'Custom Reports']
+  },
+  {
+    name: 'Premium',
+    price: '$99',
+    features: ['All Advanced Features', 'API Access', '24/7 Support', 'Custom Solutions', 'Dedicated Account Manager']
+  }
+];
+
 const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
   const navigate = useNavigate()
   const [dashboardStatus, setDashboardStatus] = useState('Loading...')
@@ -82,11 +102,58 @@ const EmbedDashboard = ({id, dashboard,setDashboard, tab}) => {
       <div id="dashboard-state" className="loading-message">
         {dashboardStatus}
       </div>
-      <dialog id="monetization" className="rounded-lg p-2 shadow-md hover:shadow-2xl">
-        <button autofocus onClick={(e) => document.getElementById("monetization").close()}>Close</button>
-        <div className='h-[20vh] w-[15vw] pt-4'>
-          <h1 className="text-lg">Not allowed. Upgrade user tier to Premium to unlock drilling</h1>
-        </div>
+      <dialog id="monetization" className="p-8 rounded-xl shadow-2xl w-full max-w-4xl">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold">Upgrade Your Plan</h2>
+        <button 
+          onClick={() => document.getElementById("monetization").close()}
+          className="p-2 rounded-full hover:bg-gray-100"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div className="grid grid-cols-3 gap-6">
+        {tiers.map((tier) => (
+          <div key={tier.name} className={`p-6 relative h-[500px] flex flex-col rounded-lg border ${
+            tier.recommended ? 'ring-2 ring-blue-500' : ''
+          }`}>
+            {tier.recommended && (
+              <div className="absolute -top-3 left-0 right-0">
+                <div className="bg-blue-500 text-white text-center py-1 text-sm rounded-full mx-auto w-32">
+                  Recommended
+                </div>
+              </div>
+            )}
+            
+            <div className="mb-4">
+              <h3 className="text-xl font-bold">{tier.name}</h3>
+              <div className="text-3xl font-bold mt-2">{tier.price}<span className="text-base font-normal text-gray-500">/mo</span></div>
+            </div>
+            
+            <ul className="space-y-4 flex-grow">
+              {tier.features.map((feature) => (
+                <li key={feature} className="flex items-center gap-2">
+                  <svg className="h-5 w-5 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M20 6L9 17L4 12" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            <button
+              className={`mt-6 w-full py-2 px-4 rounded-lg ${
+                tier.current ? 'bg-gray-100 text-gray-700' :
+                tier.recommended ? 'bg-blue-500 text-white hover:bg-blue-600' :
+                'bg-gray-800 text-white hover:bg-gray-900'
+              }`}
+            >
+              {tier.current ? 'Current Plan' : 'Upgrade'}
+            </button>
+          </div>
+        ))}
+      </div>
       </dialog>
       <div id="dashboard" ref={setupDashboard}></div>
     </div>
